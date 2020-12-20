@@ -14,6 +14,7 @@ def test_query():
     if not drill.is_active():
         raise ImproperlyConfigured('Please run Drill first')
 
+
     query = "select t.`date`, t.iso_code, t.location, t.total_cases, h.Population from " \
             "hdfs.root.`owid-covid-data.csv` AS t INNER JOIN `hdfs.root`.`population_by_country.csv` AS h ON " \
             "h.Country = t.location where " \
