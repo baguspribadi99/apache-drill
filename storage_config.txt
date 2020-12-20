@@ -1,0 +1,29 @@
+{
+  "type": "file",
+  "connection": "hdfs://139.59.108.226:9000",
+  "config": {},
+  "workspaces": {
+    "tmp": {
+      "location": "/tmp",
+      "writable": true,
+      "defaultInputFormat": null,
+      "allowAccessOutsideWorkspace": false
+    },
+    "root": {
+      "location": "/user/hdoop",
+      "writable": false,
+      "defaultInputFormat": null,
+      "allowAccessOutsideWorkspace": false
+    }
+  },
+  "formats": {
+    "csv": {
+      "type": "text",
+      "extensions": [
+        "csv"
+      ],
+      "extractHeader": true
+    }
+  },
+  "enabled": true
+}
