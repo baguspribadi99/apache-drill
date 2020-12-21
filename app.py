@@ -6,4 +6,4 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return test_query()
+    return get_all_countries_query()
