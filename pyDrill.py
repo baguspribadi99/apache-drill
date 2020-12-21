@@ -3,7 +3,8 @@ from pydrill.exceptions import ImproperlyConfigured
 import json
 from datetime import datetime, timedelta
 
-drill = PyDrill(host='139.59.108.226', port=8047)
+# drill = PyDrill(host='139.59.108.226', port=8047)
+drill = PyDrill(host='localhost', port=8047)
 yesterday = datetime.now() - timedelta(1)
 yesterday_string = datetime.strftime(yesterday, '%Y-%m-%d')
 print(yesterday_string)
@@ -24,3 +25,27 @@ def test_query():
     df = json.loads(df.to_json(orient='table'))
 
     return df
+
+def get_all_countries_query():
+    # drill.is_active()
+    if not drill.is_active():
+        raise ImproperlyConfigured('Please run Drill first')
+
+
+    query = "SELECT countrytbl.res.name name, countrytbl.res.code code FROM (SELECT FLATTEN(result) res FROM api.country.`countries`) countrytbl"
+    # 
+    country = drill.query(query)
+
+    res = {"result":[]}
+    for i in country:
+        print(i)
+        res["result"].append(i)
+
+    # df = country.to_dataframe()
+    # df = json.loads(df.to_json(orient='table'))
+
+    # print(res["result"])
+
+    result = json.dumps(res)
+
+    return result
