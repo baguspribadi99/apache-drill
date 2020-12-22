@@ -6,8 +6,14 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return get_all_countries_query()
+    return home_res()
+
 
 @app.route("/country")
 def detail():
     return get_detail_country_query(request.args.get("iso"))
+
+
+@app.route("/countries")
+def countries():
+    return countries_res()
