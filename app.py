@@ -10,4 +10,4 @@ def home():
 
 @app.route("/country")
 def detail():
-    return get_detail_country_query(request.args.get("country"))
+    return get_detail_country_query(request.args.get("iso"))

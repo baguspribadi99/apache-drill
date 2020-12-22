@@ -49,8 +49,8 @@ def get_all_countries_query():
 
     return result
 
-def get_detail_country_query(country):
-    # if country=="Indonesia":
+def get_detail_country_query(iso):
+    # if country=="IDN":
     #     return 
     
     # drill.is_active()
@@ -60,8 +60,8 @@ def get_detail_country_query(country):
     query = "SELECT columns[4] AS TotalConfirmed, columns[7] AS TotalDeaths, "\
             "columns[19] AS TotalHospitalized, columns[3] as Tanggal, columns[5] AS NewConfirmed "\
             "FROM dfs.`/tmp/data/owid-covid-data.csv` "\
-            "WHERE columns[2]='" + country + "' AND "\
-            "columns[3]='" + yesterday_string + "'"
+            "WHERE columns[0]='" + iso + "' "\
+            # "AND columns[3]='" + yesterday_string + "'"
     country = drill.query(query)
     res = {"result":[]}
     for i in country:
