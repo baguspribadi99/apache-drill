@@ -76,7 +76,7 @@ def countries_res():
     return df
 
 
-def coba_coba():
+def get_detail_indonesia_query():
     # drill.is_active()
     if not drill.is_active():
         raise ImproperlyConfigured('Please run Drill first')
@@ -88,7 +88,8 @@ def coba_coba():
     # idcovid.`har`.`key_as_string` `date`, idcovid.`har`.`jumlah_positif`.`value` `NewConfirmed` FROM (SELECT
     # FLATTEN(idncovid.`update`.`harian`) har FROM api.covidid.`update.json` idncovid) idcovid) tbl2"
     query = "SELECT idcovid.`har`.`key_as_string` `Tanggal`, idcovid.`har`.`jumlah_positif`.`value` `NewConfirmed`, " \
-            "idcovid.`har`.`jumlah_positif_kum`.`value` `TotalConfirmed`,  idcovid.`har`.`jumlah_sembuh_kum`.`value` `TotalRecovered`, " \
+            "idcovid.`har`.`jumlah_positif_kum`.`value` `TotalConfirmed`,  idcovid.`har`.`jumlah_sembuh_kum`.`value` " \
+            "`TotalRecovered`, " \
             "idcovid.`har`.`jumlah_meninggal_kum`.`value` `TotalDeaths`, idcovid.`har`.`jumlah_dirawat_kum`.`value` " \
             "`TotalHospitalized` FROM (SELECT FLATTEN(idncovid.`update`.`harian`) har FROM api.covid.`update.json` " \
             "idncovid) idcovid "
@@ -114,7 +115,7 @@ def coba_coba():
     df["Tanggal"] = df["Tanggal"].str.replace("T00:00:00.000Z", "")
     df = json.loads(df.to_json(orient='table'))
 
-    return df 
+    return df
 
 
 def get_detail_country_query(iso):
@@ -129,12 +130,12 @@ def get_detail_country_query(iso):
     #         "columns[19] AS TotalHospitalized, columns[3] as Tanggal, columns[5] AS NewConfirmed " \
     #         "FROM dfs.`/tmp/data/owid-covid-data.csv` " \
     #         "WHERE columns[0]='" + iso + "' " \
-        # "AND columns[3]='" + yesterday_string + "'"
+    # "AND columns[3]='" + yesterday_string + "'"
 
     # hdfs version
     query = "SELECT t.total_cases AS TotalConfirmed, t.total_deaths AS TotalDeaths, " \
-            "t.hosp_patients AS TotalHospitalized, t.`date` as Tanggal, t.new_cases AS NewConfirmed " \
-            "FROM hdfs.root.`owid-covid-data.csv` AS t " \
+            "t.hosp_patients AS TotalHospitalized, t.`date` as Tanggal, t.new_cases AS NewConfirmed, " \
+            "t.total_cases_per_million AS CasesPerMillion FROM hdfs.root.`owid-covid-data.csv` AS t " \
             "WHERE t.iso_code='" + iso + "' " \
 
     country = drill.query(query)
@@ -145,3 +146,18 @@ def get_detail_country_query(iso):
     result = json.dumps(res)
 
     return result
+
+
+def get_indonesia_cases_per_million():
+    if not drill.is_active():
+        raise ImproperlyConfigured('Please run Drill first')
+
+    # hdfs version
+    query = "SELECT t.total_cases_per_million AS CasesPerMillion FROM hdfs.root.`owid-covid-data.csv` AS t WHERE " \
+            "t.iso_code='IDN' "
+    indonesia = drill.query(query)
+    df = indonesia.to_dataframe()
+    df = df.tail(1)
+    df = json.loads(df.to_json(orient='table'))
+
+    return df
