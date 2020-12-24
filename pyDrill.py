@@ -81,9 +81,17 @@ def coba_coba():
     if not drill.is_active():
         raise ImproperlyConfigured('Please run Drill first')
 
-    # Query using CROSS JOIN
-    # query = "SELECT * FROM (SELECT idncovid.`update`.`penambahan`.`jumlah_positif` TotalConfirmed, idncovid.`update`.`penambahan`.`jumlah_meninggal` TotalDeaths, idncovid.`update`.`penambahan`.`jumlah_sembuh` TotalRecovered, idncovid.`update`.`penambahan`.`jumlah_dirawat` TotalHospitalised FROM api.covidid.`update.json` idncovid) tbl1 CROSS JOIN (SELECT idcovid.`har`.`key_as_string` `date`, idcovid.`har`.`jumlah_positif`.`value` `NewConfirmed` FROM (SELECT FLATTEN(idncovid.`update`.`harian`) har FROM api.covidid.`update.json` idncovid) idcovid) tbl2"
-    query = "SELECT idcovid.`har`.`key_as_string` `Tanggal`, idcovid.`har`.`jumlah_positif`.`value` `NewConfirmed`, idcovid.`har`.`jumlah_positif_kum`.`value` `TotalConfirmed`, idcovid.`har`.`jumlah_meninggal_kum`.`value` `TotalDeaths`, idcovid.`har`.`jumlah_dirawat_kum`.`value` `TotalHospitalized` FROM (SELECT FLATTEN(idncovid.`update`.`harian`) har FROM api.covidid.`update.json` idncovid) idcovid"
+    # Query using CROSS JOIN query = "SELECT * FROM (SELECT idncovid.`update`.`penambahan`.`jumlah_positif`
+    # TotalConfirmed, idncovid.`update`.`penambahan`.`jumlah_meninggal` TotalDeaths,
+    # idncovid.`update`.`penambahan`.`jumlah_sembuh` TotalRecovered, idncovid.`update`.`penambahan`.`jumlah_dirawat`
+    # TotalHospitalised FROM api.covidid.`update.json` idncovid) tbl1 CROSS JOIN (SELECT
+    # idcovid.`har`.`key_as_string` `date`, idcovid.`har`.`jumlah_positif`.`value` `NewConfirmed` FROM (SELECT
+    # FLATTEN(idncovid.`update`.`harian`) har FROM api.covidid.`update.json` idncovid) idcovid) tbl2"
+    query = "SELECT idcovid.`har`.`key_as_string` `Tanggal`, idcovid.`har`.`jumlah_positif`.`value` `NewConfirmed`, " \
+            "idcovid.`har`.`jumlah_positif_kum`.`value` `TotalConfirmed`,  idcovid.`har`.`jumlah_sembuh_kum`.`value` `TotalRecovered`, " \
+            "idcovid.`har`.`jumlah_meninggal_kum`.`value` `TotalDeaths`, idcovid.`har`.`jumlah_dirawat_kum`.`value` " \
+            "`TotalHospitalized` FROM (SELECT FLATTEN(idncovid.`update`.`harian`) har FROM api.covid.`update.json` " \
+            "idncovid) idcovid "
     # Enable CROSS JOIN. For more info please refer to this link https://drill.apache.org/docs/from-clause/
     # enable_cross_join = drill.query("set `planner.enable_nljoin_for_scalar_only` = false")
 

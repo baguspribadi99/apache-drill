@@ -23,3 +23,9 @@ def detail():
 @cross_origin()
 def countries():
     return countries_res()
+
+
+@app.route("/indonesia")
+@cross_origin()
+def indonesia():
+    return coba_coba()
