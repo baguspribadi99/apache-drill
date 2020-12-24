@@ -28,4 +28,10 @@ def countries():
 @app.route("/indonesia")
 @cross_origin()
 def indonesia():
-    return coba_coba()
+    return get_detail_indonesia_query()
+
+
+@app.route("/indonesia-case-per-million")
+@cross_origin()
+def indonesia_case_per_million():
+    return get_indonesia_cases_per_million()
