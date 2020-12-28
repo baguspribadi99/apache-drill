@@ -35,3 +35,9 @@ def indonesia():
 @cross_origin()
 def indonesia_case_per_million():
     return get_indonesia_cases_per_million()
+
+
+@app.route("/get-hospitalised-selected")
+@cross_origin()
+def get_hospitalized_selected():
+    return get_hospitalised_selected(request.args.get("iso"))
