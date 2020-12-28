@@ -161,3 +161,25 @@ def get_indonesia_cases_per_million():
     df = json.loads(df.to_json(orient='table'))
 
     return df
+
+
+def get_hospitalised_selected(iso):
+
+    if not drill.is_active():
+        raise ImproperlyConfigured('Please run Drill first')
+
+    query = "SELECT t.hosp_patients AS TotalHospitalized, t.`date` as Tanggal FROM hdfs.root.`owid-covid-data.csv` AS" \
+            " t WHERE t.iso_code='" + iso + "' "
+
+    country = drill.query(query)
+    df = country.to_dataframe()
+
+    nan_value = float("NaN")
+    df.replace("", nan_value, inplace=True)
+
+    df.dropna(subset=["TotalHospitalized"], inplace=True)
+    df = df.tail(1)
+
+    df = json.loads(df.to_json(orient='table'))
+
+    return df
